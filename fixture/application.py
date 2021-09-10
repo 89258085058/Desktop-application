@@ -1,13 +1,19 @@
 from pywinauto import Application as WinApplication
+from fixture.gruop import GroupHelper
 
 
 class Application:
 
     def __init__(self, target):
         self.application = WinApplication(backend="win32").start(target)
+        #self.application = WinApplication(backend="uia").start(target)
         self.main_window = self.application.window(title="Free Address Book")
         self.main_window.wait("visible")
-        #self.application = WinApplication(backend="uia").start(target)
+        self.groups = GroupHelper(self)
+
+
+
+
 
 
 
