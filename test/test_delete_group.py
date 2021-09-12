@@ -9,3 +9,5 @@ def test_del_group(app):
     new_list = app.groups.get_group_list()
     old_list.remove(group)
     assert sorted(old_list) == sorted(new_list)
+
+
