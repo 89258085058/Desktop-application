@@ -15,4 +15,4 @@ def test_add_group_generator(app, excel_groups):
     app.groups.add_new_group(group)
     new_list = app.groups.get_group_list()
     old_list.append(group)
-    assert sorted(old_list, key=Group.name) == sorted(new_list, key=Group.name)
+    assert sorted(old_list, key=Group.id_or_max) == sorted(new_list, key=Group.id_or_max)

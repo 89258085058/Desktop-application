@@ -31,7 +31,7 @@ class GroupHelper:
     def open_group_editor(self):
         self.app.main_window.window(auto_id="groupButton").click()
         self.group_editor = self.app.application.window(title="Group editor")
-        self.group_editor.wait("visible", 1000)
+        self.group_editor.wait("visible")
 
     def close_group_editor(self):
         self.group_editor.close()
