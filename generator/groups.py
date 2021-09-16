@@ -2,6 +2,7 @@ from comtypes.client import CreateObject
 import os.path
 
 
+
 n = 5
 f = "fixture/groups.xlsx"
 
