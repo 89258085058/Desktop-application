@@ -1,8 +1,7 @@
 import os
 import pytest
-from model.group import Group
-from comtypes.client import CreateObject
 from fixture.application import Application
+from comtypes.client import CreateObject
 
 
 @pytest.fixture(scope="session")
@@ -11,31 +10,21 @@ def app(request):
     request.addfinalizer(fixture.destroy)
     return fixture
 
-
 def pytest_generate_tests(metafunc):
     for fixture in metafunc.fixturenames:
-        if fixture.startswith("excel_"):
-            testdata = load_from_excel(fixture[6:])
-            metafunc.parametrize(fixture, testdata, ids=[str(x) for x in testdata])
+        if fixture.startswith("xlsx_"):
+            testdata = load_from_excel(fixture[5:])
+            metafunc.parametrize(fixture, testdata)
 
 
 def load_from_excel(file):
-    testdata = []
-    xl = CreateObject("Excel.Application")
-    xl.Visible = 1
-    wb = xl.Workbooks.Open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "data/%s.xlsx" % file))
+    xlsx_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), f"fixture/{file}.xlsx")
+    app = CreateObject("Excel.Application")
+    wb = app.Workbooks.Open(xlsx_file)
     worksheet = wb.Sheets[1]
-    if worksheet.Cells[1, 1].Value() == "Groups":
-        testdata = load_groups(worksheet)
-    xl.Quit()
-    return testdata
-
-
-def load_groups(worksheet):
-    data = []
-    for row in range(2, worksheet.Rows.Count):
-        value_ex = worksheet.Cells[row, 1].Value()
-        if value_ex is None:
-            break
-        data.append(Group(name=value_ex))
-    return data
+    test_data = []
+    for row in range(1, 100):
+        data = worksheet.Cells[row, 1].Value()
+        if data is not None:
+            test_data.append(data)
+    return test_data

@@ -1,38 +1,16 @@
 from comtypes.client import CreateObject
-import getopt
-import string
-import random
-import sys
-import os
+import os.path
 
 
-try:
-    opts, args = getopt.getopt(sys.argv[1:], "n:f:", ["number of groups", "file"])
-except getopt.GetoptError as err:
-    getopt.usage()
-    sys.exit(2)
+n = 5
+f = "fixture/groups.xlsx"
 
-n = 10
-f = "data/groups.xlsx"
-
-for o, a in opts:
-    if o == "-n":
-        n = int(a)
-    elif o == "-f":
-        f = a
-
-
-def random_string(prefix, maxlen):
-    symbols = string.digits + string.ascii_letters
-    return prefix + "".join([random.choice(symbols) for _ in range(random.randrange(maxlen))])
-
-project_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", f)
 
 xl = CreateObject("Excel.Application")
 xl.Visible = 1
 wb = xl.Workbooks.Add()
-xl.Range["A1"].Value[()] = "Groups"
 for i in range(n):
-    xl.Range["A%s" % (i + 2)].Value[()] = random_string("group", 10)
-wb.SaveAs(os.path.join(project_dir, f))
+    xl.Range["A%s" % (i+1)].Value[()] = "group %s" % i
+wb.SaveAs(os.path.join(file))
 xl.Quit()
